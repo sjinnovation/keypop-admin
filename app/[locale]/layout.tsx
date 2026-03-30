@@ -1,5 +1,4 @@
-import { NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server";
+import AppIntlProvider from "@/components/AppIntlProvider";
 import React from "react";
 
 export default async function layout({
@@ -10,13 +9,11 @@ export default async function layout({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const messages = await getMessages();
+  const messages = (await import(`@/constant/translate/${locale}.json`)).default;
 
   return (
-    <>
-      <NextIntlClientProvider locale={locale} messages={messages}>
-        {children}
-      </NextIntlClientProvider>
-    </>
+    <AppIntlProvider locale={locale} messages={messages}>
+      {children}
+    </AppIntlProvider>
   );
 }

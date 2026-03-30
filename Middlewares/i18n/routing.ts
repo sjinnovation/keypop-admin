@@ -7,4 +7,7 @@ export const routing = defineRouting({
   localePrefix: 'as-needed'
 });
 
+/** Fixed zone so server and client agree (avoids next-intl ENVIRONMENT_FALLBACK). */
+export const APP_TIME_ZONE = 'UTC';
+
 export const { Link, redirect, usePathname, useRouter } = createNavigation(routing);

@@ -1,5 +1,17 @@
 import { axiosPrivate, axiosPublic } from "@/lib/axios";
-import { CREATE_ADMIN_USER, DELETE_ADMIN_USER, GET_ADMIN_USERS, GET_ALL_ADMIN_USERS, GET_USER_INFO, UPDATE_ADMIN_USER } from "@/constant/ApiConstants";
+import { CREATE_ADMIN_USER, DELETE_ADMIN_USER, GET_ADMIN_USERS, GET_ALL_ADMIN_USERS, GET_ALL_USERS, GET_USER_INFO, UPDATE_ADMIN_USER } from "@/constant/ApiConstants";
+
+export const normalizeUsersList = (payload: unknown): any[] => {
+  if (Array.isArray(payload)) return payload;
+  if (payload && typeof payload === "object") {
+    const o = payload as Record<string, unknown>;
+    if (Array.isArray(o.data)) return o.data as any[];
+    if (Array.isArray(o.users)) return o.users as any[];
+    const inner = o.data as Record<string, unknown> | undefined;
+    if (inner && Array.isArray(inner.users)) return inner.users as any[];
+  }
+  return [];
+};
 
 export const createAdminUser = async (userData: {
   name: string;
@@ -21,6 +33,15 @@ export const getAdminUsers = async (page = 1, limit = 10) => {
       params: { page, limit }
     });
     return response.data;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || error.response?.data?.error || 'An error occurred while fetching users');
+  }
+};
+
+export const getAllUsers = async () => {
+  try {
+    const response = await axiosPrivate.get(GET_ALL_USERS());
+    return { users: normalizeUsersList(response.data) };
   } catch (error: any) {
     throw new Error(error.response?.data?.message || error.response?.data?.error || 'An error occurred while fetching users');
   }

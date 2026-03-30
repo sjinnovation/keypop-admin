@@ -1,6 +1,8 @@
 import { getRequestConfig } from 'next-intl/server';
 import {notFound} from 'next/navigation';
-import {routing} from './routing';
+import { createAppMessageFallback } from './getMessageFallback';
+import { APP_TIME_ZONE, routing } from './routing';
+import { ensureCriticalMessages } from '@/utils/intlMessages';
 
 export default getRequestConfig(async ({
   requestLocale
@@ -15,8 +17,13 @@ export default getRequestConfig(async ({
      locale = routing.defaultLocale;
    }
    
+    const raw = (await import(`@/constant/translate/${locale}.json`)).default;
+    const messages = ensureCriticalMessages(raw, locale);
+
     return {
-    locale,
-    messages: (await import(`@/constant/translate/${locale}.json`)).default,
+      locale,
+      messages,
+      timeZone: APP_TIME_ZONE,
+      getMessageFallback: createAppMessageFallback(locale),
     };
   });

@@ -7,7 +7,20 @@
     "Profile": "ประวัติโดยย่อ",
     "Logout": "ออกจากระบบ",
     "countryManagement": "การจัดการประเทศ",
+    "RegisteredUsers": "ผู้ใช้ที่ลงทะเบียน",
+    "SurveyResponses": "คำตอบแบบสำรวจ",
     "Welcome": "ยินดีต้อนรับ"
+  },
+  "RegisteredUsers": {
+    "Title": "ผู้ใช้ที่ลงทะเบียน",
+    "FilterByRole": "กรองตามบทบาท",
+    "AllRoles": "บทบาททั้งหมด",
+    "Table": {
+      "Name": "ชื่อ",
+      "Email": "อีเมล",
+      "Role": "บทบาท",
+      "Joined": "วันที่เข้าร่วม"
+    }
   },
   "AdminManagement": {
     "Title": "การจัดการผู้ดูแลระบบ",
@@ -74,6 +87,30 @@
       "Title": "ชื่อ",
       "Country": "ประเทศ",
       "Actions": "การดำเนินการ"
+    }
+  },
+  "SurveyResponses": {
+    "Title": "คำตอบแบบสำรวจ",
+    "FilterSurvey": "แบบสำรวจ",
+    "FilterStatus": "สถานะ",
+    "AllSurveys": "แบบสำรวจทั้งหมด",
+    "AllStatuses": "สถานะทั้งหมด",
+    "StatusComplete": "เสร็จสมบูรณ์",
+    "StatusPartial": "ยังไม่ครบ",
+    "DownloadPdf": "ดาวน์โหลดทั้งหมด (PDF)",
+    "DownloadCsv": "ดาวน์โหลดทั้งหมด (CSV)",
+    "ExportHint": "เลือกแบบสำรวจเพื่อดาวน์โหลดคำตอบทั้งหมดเป็น PDF หรือ CSV",
+    "ExportSuccess": "ดาวน์โหลด {format} สำเร็จ",
+    "ExportFailed": "ดาวน์โหลดล้มเหลว",
+    "FetchFailed": "โหลดคำตอบไม่สำเร็จ",
+    "ErrorUnauthorized": "เซสชันหมดอายุ กรุณาเข้าสู่ระบบใหม่",
+    "ErrorForbidden": "คุณไม่มีสิทธิ์ดำเนินการนี้",
+    "Table": {
+      "Survey": "แบบสำรวจ",
+      "Respondent": "ผู้ตอบ",
+      "Status": "สถานะ",
+      "Submitted": "ส่งเมื่อ",
+      "ResponseId": "รหัสคำตอบ"
     }
   },
   "Export": {

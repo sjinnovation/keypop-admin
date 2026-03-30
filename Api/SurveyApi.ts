@@ -1,4 +1,11 @@
-import { CREATE_SURVEY, EDIT_SURVEY, GET_ALL_SURVEYS, GET_SURVEY_BY_ID, DELETE_SURVEY } from "@/constant/ApiConstants";
+import {
+  CREATE_SURVEY,
+  EDIT_SURVEY,
+  GET_ALL_SURVEYS,
+  GET_SURVEY_ADMIN_RESPONSES,
+  GET_SURVEY_BY_ID,
+  DELETE_SURVEY,
+} from "@/constant/ApiConstants";
 import { axiosPrivate } from "@/lib/axios";
 
 export const getAllSurveys = async () => {
@@ -49,3 +56,25 @@ export const deleteSurvey = async (id: any) => {
   }
 };
 
+export type AdminSurveyResponsesParams = {
+  page?: number;
+  limit?: number;
+  surveyId?: string;
+  status?: "complete" | "partial";
+};
+
+export const getAdminSurveyResponses = async (params: AdminSurveyResponsesParams) => {
+  try {
+    const response = await axiosPrivate.get(GET_SURVEY_ADMIN_RESPONSES(), { params });
+    return response.data;
+  } catch (error: any) {
+    const status = error.response?.status;
+    if (status === 401) throw new Error("UNAUTHORIZED");
+    if (status === 403) throw new Error("FORBIDDEN");
+    throw new Error(
+      error.response?.data?.message ||
+        error.response?.data?.error ||
+        "An error occurred while fetching survey responses"
+    );
+  }
+};

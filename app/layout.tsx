@@ -14,8 +14,8 @@ export default function RootLayout({
   return (
     <QueryClientProvider client={queryClient}>
     <AuthProvider>
-      <html lang="en">
-        <body className="h-screen">
+      <html lang="en" suppressHydrationWarning>
+        <body className="h-screen" suppressHydrationWarning>
         <ToastContainer />
           {children} 
         </body>

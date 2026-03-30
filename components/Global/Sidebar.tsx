@@ -5,21 +5,26 @@ import Link from "next/link";
 import { getUser } from "@/utils/storage";
 import { useAuth } from "@/context/AuthContext";
 import { usePathname } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { getSidebarSurveyResponsesLabel } from "@/utils/intlMessages";
 
 export default function Sidebar() {
   const { logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [items, setItems] = useState<{ label: string; link: string }[]>([]);
   const pathname = usePathname();
+  const locale = useLocale();
   const translate = useTranslations("Sidebar");
 
   useEffect(() => {
     const user: any = getUser();
+    const surveyResponsesLabel = getSidebarSurveyResponsesLabel(locale);
 
     const superAdminItems = [
       { label: translate("AdminManagement"), link: "/dashboard/manage-admins" },
+      { label: translate("RegisteredUsers"), link: "/dashboard/registered-users" },
       { label: translate("Surveys"), link: "/dashboard/survey" },
+      { label: surveyResponsesLabel, link: "/dashboard/survey/responses" },
       { label: translate("ContactRequests"), link: "/dashboard/contact-requests" },
       { label: translate("countryManagement"), link: "/dashboard/manage-countries" },
       { label: translate("Profile"), link: "/dashboard/profile" },
@@ -27,12 +32,14 @@ export default function Sidebar() {
 
     const adminItems = [
       { label: translate("Surveys"), link: "/dashboard/survey" },
+      { label: surveyResponsesLabel, link: "/dashboard/survey/responses" },
       { label: translate("countryManagement"), link: "/dashboard/manage-countries" },
       { label: translate("Profile"), link: "/dashboard/profile" },
     ];
 
     const communityAdminItems = [
       { label: translate("Surveys"), link: "/dashboard/survey" },
+      { label: surveyResponsesLabel, link: "/dashboard/survey/responses" },
       { label: translate("Profile"), link: "/dashboard/profile" },
     ];
 
@@ -43,7 +50,7 @@ export default function Sidebar() {
     } else if (user.role === "communityadmin"){
       setItems(communityAdminItems);
     }
-  }, []);
+  }, [locale, translate]);
 
   return (
     <div className="flex">

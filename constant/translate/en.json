@@ -7,7 +7,20 @@
     "Profile": "Profile",
     "Logout": "Logout",
     "countryManagement": "Country Management",
+    "RegisteredUsers": "Registered Users",
+    "SurveyResponses": "Survey responses",
     "Welcome": "Welcome"
+  },
+  "RegisteredUsers": {
+    "Title": "Registered Users",
+    "FilterByRole": "Filter by role",
+    "AllRoles": "All roles",
+    "Table": {
+      "Name": "Name",
+      "Email": "Email",
+      "Role": "Role",
+      "Joined": "Joined"
+    }
   },
   "AdminManagement": {
     "Title": "Admin Management",
@@ -74,6 +87,30 @@
       "Title": "Title",
       "Country": "Country",
       "Actions": "Actions"
+    }
+  },
+  "SurveyResponses": {
+    "Title": "Survey responses",
+    "FilterSurvey": "Survey",
+    "FilterStatus": "Status",
+    "AllSurveys": "All surveys",
+    "AllStatuses": "All statuses",
+    "StatusComplete": "Complete",
+    "StatusPartial": "Partial",
+    "DownloadPdf": "Download all (PDF)",
+    "DownloadCsv": "Download all (CSV)",
+    "ExportHint": "Select a specific survey to download all responses as PDF or CSV.",
+    "ExportSuccess": "Downloaded {format} successfully",
+    "ExportFailed": "Download failed",
+    "FetchFailed": "Failed to load responses",
+    "ErrorUnauthorized": "Your session has expired. Please sign in again.",
+    "ErrorForbidden": "You do not have permission to perform this action.",
+    "Table": {
+      "Survey": "Survey",
+      "Respondent": "Respondent",
+      "Status": "Status",
+      "Submitted": "Submitted",
+      "ResponseId": "Response ID"
     }
   },
   "Export": {
