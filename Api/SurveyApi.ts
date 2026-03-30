@@ -4,6 +4,7 @@ import {
   EDIT_SURVEY,
   GET_ALL_SURVEYS,
   GET_SURVEY_ADMIN_RESPONSES,
+  GET_SURVEY_ADMIN_RESPONSE_DETAIL,
   GET_SURVEY_BY_ID,
   DELETE_SURVEY,
 } from "@/constant/ApiConstants";
@@ -81,6 +82,40 @@ export const getAdminSurveyResponses = async (params: AdminSurveyResponsesParams
 };
 
 const COMMUNITY_ADMIN_COUNTRY_REQUIRED = "COMMUNITY_ADMIN_COUNTRY_REQUIRED";
+
+/** Unwraps GET `/survey/admin/responses/:id` body whether the server uses `{ data: detail }` or returns detail at top level. */
+function unwrapSurveyAdminDetailPayload(body: unknown): unknown {
+  if (!body || typeof body !== "object" || Array.isArray(body)) return body;
+  const b = body as Record<string, unknown>;
+  if ("data" in b && b.data != null && typeof b.data === "object") return b.data;
+  return body;
+}
+
+export const getAdminSurveyResponseDetail = async (responseId: string) => {
+  try {
+    const response = await axiosPrivate.get(GET_SURVEY_ADMIN_RESPONSE_DETAIL(responseId));
+    return unwrapSurveyAdminDetailPayload(response.data);
+  } catch (error: any) {
+    const status = error.response?.status;
+    const data = error.response?.data;
+    if (status === 401) throw new Error("UNAUTHORIZED");
+    if (status === 403) {
+      if (
+        data?.code === COMMUNITY_ADMIN_COUNTRY_REQUIRED ||
+        data?.error === COMMUNITY_ADMIN_COUNTRY_REQUIRED
+      ) {
+        throw new Error(COMMUNITY_ADMIN_COUNTRY_REQUIRED);
+      }
+      throw new Error(data?.message || data?.error || "FORBIDDEN");
+    }
+    if (status === 404) throw new Error("NOT_FOUND");
+    throw new Error(
+      data?.message ||
+        data?.error ||
+        "An error occurred while loading the survey response"
+    );
+  }
+};
 
 export const deleteAdminSurveyResponse = async (responseId: string) => {
   try {

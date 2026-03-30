@@ -16,6 +16,7 @@ const login = async (email: string, password: string) => {
     const response = await axiosPublic.post("/auth/login", {
       email,
       password,
+      admin: true,
     });
 
     setToken(response.data.data);
