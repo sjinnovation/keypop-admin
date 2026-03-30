@@ -34,3 +34,5 @@ export const CREATE_SURVEY = () => `/survey`;
 export const EDIT_SURVEY = (id: string) => `/survey/${id}`;
 export const DELETE_SURVEY = (id: string) => `/survey/${id}`;
 export const GET_SURVEY_ADMIN_RESPONSES = () => `/survey/admin/responses`;
+export const DELETE_SURVEY_ADMIN_RESPONSE = (responseId: string) =>
+  `/survey/admin/responses/${responseId}`;

@@ -1,13 +1,19 @@
 "use client";
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import Image from "next/image";
 import Table from "../Global/Table";
 import Button from "../Global/Button";
 import { toast } from "react-toastify";
-import { getAdminSurveyResponses, getAllSurveys } from "@/Api/SurveyApi";
+import {
+  deleteAdminSurveyResponse,
+  getAdminSurveyResponses,
+  getAllSurveys,
+} from "@/Api/SurveyApi";
 import { downloadAllSurveyResponses } from "@/Api/ExportApi";
 import Preloader from "../Global/Preloader/Preloader";
 import { useTranslations } from "next-intl";
+import { Icons } from "@/Assets";
 
 const formatDate = (value: string | undefined) => {
   if (!value) return "—";
@@ -70,11 +76,16 @@ const SurveyResponses = () => {
   const [itemsPerPage, setItemsPerPage] = useState(20);
   const [totalPages, setTotalPages] = useState(1);
   const [exporting, setExporting] = useState(false);
+  const [listVersion, setListVersion] = useState(0);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const resolveMessage = useCallback(
     (code: string) => {
       if (code === "UNAUTHORIZED") return t("ErrorUnauthorized");
       if (code === "FORBIDDEN") return t("ErrorForbidden");
+      if (code === "COMMUNITY_ADMIN_COUNTRY_REQUIRED") {
+        return t("ErrorCommunityAdminCountry");
+      }
       return code;
     },
     [t]
@@ -116,6 +127,9 @@ const SurveyResponses = () => {
         );
         setTableData(responses);
         setTotalPages(tp);
+        if (responses.length === 0 && currentPage > 1) {
+          setCurrentPage((p) => Math.max(1, p - 1));
+        }
       } catch (err: any) {
         if (cancelled) return;
         const msg = resolveMessage(err.message || t("FetchFailed"));
@@ -130,7 +144,32 @@ const SurveyResponses = () => {
     return () => {
       cancelled = true;
     };
-  }, [currentPage, itemsPerPage, surveyFilter, statusFilter, resolveMessage, t]);
+  }, [
+    currentPage,
+    itemsPerPage,
+    surveyFilter,
+    statusFilter,
+    listVersion,
+    resolveMessage,
+    t,
+  ]);
+
+  const handleDeleteResponse = useCallback(
+    async (responseId: string) => {
+      if (!responseId || !window.confirm(t("DeleteConfirm"))) return;
+      try {
+        setDeletingId(responseId);
+        await deleteAdminSurveyResponse(responseId);
+        toast.success(t("DeleteSuccess"));
+        setListVersion((v) => v + 1);
+      } catch (err: any) {
+        toast.error(resolveMessage(err.message || t("DeleteFailed")));
+      } finally {
+        setDeletingId(null);
+      }
+    },
+    [t, resolveMessage]
+  );
 
   const handleExport = async (format: "pdf" | "csv") => {
     if (!surveyFilter) return;
@@ -176,8 +215,26 @@ const SurveyResponses = () => {
         render: (value: string) =>
           typeof value === "string" && value.length > 12 ? `${value.slice(0, 12)}…` : value || "—",
       },
+      {
+        header: t("Table.Actions"),
+        accessor: "_id",
+        render: (responseId: string, row: any) => {
+          const id = responseId || row?.id;
+          return (
+            <button
+              type="button"
+              className="px-2 py-1 disabled:opacity-40"
+              disabled={!id || deletingId === id}
+              onClick={() => handleDeleteResponse(id)}
+              aria-label={t("DeleteResponse")}
+            >
+              <Image src={Icons.DeleteIcon} alt={t("DeleteResponse")} width={16} height={16} />
+            </button>
+          );
+        },
+      },
     ],
-    [t]
+    [t, deletingId, handleDeleteResponse]
   );
 
   return (

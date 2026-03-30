@@ -1,5 +1,6 @@
 import {
   CREATE_SURVEY,
+  DELETE_SURVEY_ADMIN_RESPONSE,
   EDIT_SURVEY,
   GET_ALL_SURVEYS,
   GET_SURVEY_ADMIN_RESPONSES,
@@ -75,6 +76,35 @@ export const getAdminSurveyResponses = async (params: AdminSurveyResponsesParams
       error.response?.data?.message ||
         error.response?.data?.error ||
         "An error occurred while fetching survey responses"
+    );
+  }
+};
+
+const COMMUNITY_ADMIN_COUNTRY_REQUIRED = "COMMUNITY_ADMIN_COUNTRY_REQUIRED";
+
+export const deleteAdminSurveyResponse = async (responseId: string) => {
+  try {
+    const response = await axiosPrivate.delete(DELETE_SURVEY_ADMIN_RESPONSE(responseId));
+    return response.data;
+  } catch (error: any) {
+    const status = error.response?.status;
+    const data = error.response?.data;
+    if (status === 401) throw new Error("UNAUTHORIZED");
+    if (status === 403) {
+      if (
+        data?.code === COMMUNITY_ADMIN_COUNTRY_REQUIRED ||
+        data?.error === COMMUNITY_ADMIN_COUNTRY_REQUIRED
+      ) {
+        throw new Error(COMMUNITY_ADMIN_COUNTRY_REQUIRED);
+      }
+      throw new Error(
+        data?.message || data?.error || "FORBIDDEN"
+      );
+    }
+    throw new Error(
+      data?.message ||
+        data?.error ||
+        "An error occurred while deleting the survey response"
     );
   }
 };

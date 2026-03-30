@@ -105,12 +105,18 @@
     "FetchFailed": "โหลดคำตอบไม่สำเร็จ",
     "ErrorUnauthorized": "เซสชันหมดอายุ กรุณาเข้าสู่ระบบใหม่",
     "ErrorForbidden": "คุณไม่มีสิทธิ์ดำเนินการนี้",
+    "ErrorCommunityAdminCountry": "บัญชีผู้ดูแลชุมชนต้องมีประเทศกำหนดก่อนจัดการคำตอบ",
+    "DeleteResponse": "ลบคำตอบ",
+    "DeleteConfirm": "ลบคำตอบแบบสำรวจนี้หรือไม่? ไม่สามารถย้อนกลับได้",
+    "DeleteSuccess": "ลบคำตอบแบบสำรวจสำเร็จ",
+    "DeleteFailed": "ลบคำตอบไม่สำเร็จ",
     "Table": {
       "Survey": "แบบสำรวจ",
       "Respondent": "ผู้ตอบ",
       "Status": "สถานะ",
       "Submitted": "ส่งเมื่อ",
-      "ResponseId": "รหัสคำตอบ"
+      "ResponseId": "รหัสคำตอบ",
+      "Actions": "การดำเนินการ"
     }
   },
   "Export": {

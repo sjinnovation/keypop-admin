@@ -105,12 +105,18 @@
     "FetchFailed": "Failed to load responses",
     "ErrorUnauthorized": "Your session has expired. Please sign in again.",
     "ErrorForbidden": "You do not have permission to perform this action.",
+    "ErrorCommunityAdminCountry": "A country must be assigned to your community admin account to manage responses.",
+    "DeleteResponse": "Delete response",
+    "DeleteConfirm": "Delete this survey response? This cannot be undone.",
+    "DeleteSuccess": "Survey response deleted successfully",
+    "DeleteFailed": "Failed to delete survey response",
     "Table": {
       "Survey": "Survey",
       "Respondent": "Respondent",
       "Status": "Status",
       "Submitted": "Submitted",
-      "ResponseId": "Response ID"
+      "ResponseId": "Response ID",
+      "Actions": "Actions"
     }
   },
   "Export": {
