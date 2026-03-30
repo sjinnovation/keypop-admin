@@ -21,6 +21,31 @@ const formatDate = (value: string | undefined) => {
   return Number.isNaN(d.getTime()) ? "—" : d.toLocaleString();
 };
 
+/** Admin list payloads may use _id, id, or responseId, and sometimes BSON as { $oid }. */
+function coerceResponseId(raw: unknown): string | undefined {
+  if (raw == null || raw === "") return undefined;
+  if (typeof raw === "string") {
+    const t = raw.trim();
+    return t || undefined;
+  }
+  if (typeof raw === "number" && Number.isFinite(raw)) return String(raw);
+  if (typeof raw === "object") {
+    const o = raw as Record<string, unknown>;
+    if (typeof o.$oid === "string") return o.$oid;
+    if (typeof o._id === "string") return o._id;
+  }
+  return undefined;
+}
+
+function getSurveyResponseRowId(row: any): string | undefined {
+  if (!row || typeof row !== "object") return undefined;
+  for (const key of ["_id", "id", "responseId", "response_id"] as const) {
+    const s = coerceResponseId(row[key]);
+    if (s) return s;
+  }
+  return undefined;
+}
+
 function normalizeAdminResponsesPayload(payload: unknown, fallbackLimit: number) {
   const p = payload as Record<string, unknown> | undefined;
   let inner: Record<string, unknown> = {};
@@ -212,14 +237,16 @@ const SurveyResponses = () => {
       {
         header: t("Table.ResponseId"),
         accessor: "_id",
-        render: (value: string) =>
-          typeof value === "string" && value.length > 12 ? `${value.slice(0, 12)}…` : value || "—",
+        render: (_: unknown, row: any) => {
+          const id = getSurveyResponseRowId(row);
+          return typeof id === "string" && id.length > 12 ? `${id.slice(0, 12)}…` : id || "—";
+        },
       },
       {
         header: t("Table.Actions"),
         accessor: "_id",
-        render: (responseId: string, row: any) => {
-          const id = responseId || row?.id;
+        render: (_: unknown, row: any) => {
+          const id = getSurveyResponseRowId(row);
           return (
             <button
               type="button"
